@@ -1,6 +1,7 @@
 package com.nyash.sneakychat.api.ws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nyash.sneakychat.Config.WebSocketConfig;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -59,7 +60,7 @@ public class WebSocketTests {
 
         RunStompFrameHandler runStompFrameHandler = new RunStompFrameHandler(new CompletableFuture<>());
 
-        String wsUrl = "ws://127.0.0.1:" + port + "/ws";
+        String wsUrl = "ws://127.0.0.1:" + port + WebSocketConfig.REGISTRY;
 
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
 
@@ -114,7 +115,13 @@ public class WebSocketTests {
 
         String chatId = (String) params.get(0).get("id");
 
-        String destination
+        String destination ChatWsController.getFetchPersonalMessagesDestination(chatId, RandomIdGenerator.generate());
+
+        final RunStompFrameHandler runStompFrameHandler = new RunStompFrameHandler(new CompletableFuture<>());
+        stompSession.subscribe(
+                destination,
+                runStompFrameHandler
+        );
     }
 
     private List<Transport> createTransportClient() {

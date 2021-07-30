@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -29,9 +28,12 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Log4j2
 @ActiveProfiles("test-nyash")
@@ -47,7 +49,7 @@ public class WebSocketTests {
     private static WebClient client;
 
     @Autowired
-    ObjectMapper objectMapper;
+    ObjectMapper mapper;
 
     @Autowired
     MockMvc mockMvc;
@@ -77,7 +79,42 @@ public class WebSocketTests {
     @AfterAll
     public void tearDown() {
 
-        if (client)
+        if (client.getStompSession().isConnected()) {
+            client.getStompSession().disconnect();
+            client.stompClient.stop();
+        }
+    }
+
+    @SneakyThrows
+    @Test
+    public void should_PassSuccessfully_When_CreateChat() {
+
+        StompSession stompSession = client.getStompSession();
+
+        RunStompFrameHandler handler = client.getHandler();
+
+        String chatName = "Sneaky chat";
+
+        stompSession.send(
+                ChatWSController.CREATE_CHAT,
+                chatName
+        );
+
+        String contentAsString = mockMvc
+                .perform(MockMvcRequestBuilders.get(ChatRestController.FETCH_CHATS))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<LinkedHashMap<String, Object>> params =
+                (List<LinkedHashMap<String, Object>>) mapper.readValue(contentAsString, List.class);
+
+        Assertions.assertFalse(params.isEmpty());
+
+        String chatId = (String) params.get(0).get("id");
+
+        String destination
     }
 
     private List<Transport> createTransportClient() {

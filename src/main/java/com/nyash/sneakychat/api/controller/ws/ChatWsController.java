@@ -72,11 +72,12 @@ public class ChatWsController {
     @MessageMapping(SEND_MESSAGE_TO_PARTICIPANT)
     public void SendMessageToParticipant(
             @DestinationVariable("chat_id") String chatId,
+            @DestinationVariable("participant_id") String participantId,
             String message,
             @Header String simpSessionId) {
 
         messagingTemplate.convertAndSend(
-                getFetchMessagesDestination(chatId),
+                getFetchPersonalMessagesDestination(chatId, participantId),
                 MessageDto.builder()
                         .from(simpSessionId)
                         .message(message)
@@ -96,5 +97,11 @@ public class ChatWsController {
 
     private String getFetchMessagesDestination(String chatId) {
         return FETCH_MESSAGES.replace("{chat_id}", chatId);
+    }
+
+    private String getFetchPersonalMessagesDestination(String chatId, String participantId) {
+        return FETCH_PERSONAL_MESSAGES
+                .replace("{chat_id}", chatId)
+                .replace("{participant_id}", participantId);
     }
 }

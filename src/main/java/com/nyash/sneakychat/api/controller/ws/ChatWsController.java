@@ -111,11 +111,11 @@ public class ChatWsController {
         );
     }
 
-    private String getFetchMessagesDestination(String chatId) {
+    public static String getFetchMessagesDestination(String chatId) {
         return FETCH_MESSAGES.replace("{chat_id}", chatId);
     }
 
-    private String getFetchPersonalMessagesDestination(String chatId, String participantId) {
+    public static String getFetchPersonalMessagesDestination(String chatId, String participantId) {
         return FETCH_PERSONAL_MESSAGES
                 .replace("{chat_id}", chatId)
                 .replace("{participant_id}", participantId);

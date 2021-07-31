@@ -12,7 +12,7 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ParticipantDto {
 
-    String participantId;
+    String id;
 
     @Builder.Default
     Instant enterAt = Instant.now();

@@ -60,12 +60,10 @@ public class ChatWsController {
             String message,
             @Header String simpSessionId) {
 
-        messagingTemplate.convertAndSend(
+        sendMessage(
                 getFetchMessagesDestination(chatId),
-                MessageDto.builder()
-                        .from(simpSessionId)
-                        .message(message)
-                        .build()
+                simpSessionId,
+                message
         );
     }
 
@@ -76,12 +74,10 @@ public class ChatWsController {
             String message,
             @Header String simpSessionId) {
 
-        messagingTemplate.convertAndSend(
+        sendMessage(
                 getFetchPersonalMessagesDestination(chatId, participantId),
-                MessageDto.builder()
-                        .from(simpSessionId)
-                        .message(message)
-                        .build()
+                simpSessionId,
+                message
         );
     }
 
@@ -93,6 +89,17 @@ public class ChatWsController {
     @SubscribeMapping(FETCH_PERSONAL_MESSAGES)
     public MessageDto fetchPersonalMessages() {
         return null;
+    }
+
+    private void sendMessage(String destination, String sessionId, String message) {
+
+        messagingTemplate.convertAndSend(
+                destination,
+                MessageDto.builder()
+                        .from(sessionId)
+                        .message(message)
+                        .build()
+        );
     }
 
     private String getFetchMessagesDestination(String chatId) {

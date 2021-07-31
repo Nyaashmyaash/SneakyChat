@@ -28,4 +28,13 @@ public class ParticipantWsController {
     public ParticipantDto fetchParticipantLeaveChat() {
         return null;
     }
+
+    public String getFetchParticipantJoinInChat(String chatId) {
+        return FETCH_PARTICIPANT_JOIN_IN_CHAT.replace("{chat_id}", chatId);
+    }
+
+    public String getFetchParticipantLeaveChat(String chatId) {
+        return FETCH_PARTICIPANT_LEAVE_CHAT.replace("{chat_id}", chatId);
+    }
+
 }

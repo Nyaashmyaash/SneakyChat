@@ -3,6 +3,7 @@ package com.nyash.sneakychat.api.controller.ws;
 import com.nyash.sneakychat.api.domain.Chat;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -18,8 +19,9 @@ public class ChatWsController {
         Chat chat = Chat.builder()
                 .name(chatName)
                 .build();
-
-
     }
+
+    @SubscribeMapping(CREATE_CHAT_EVENT)
+    public void
 
 }

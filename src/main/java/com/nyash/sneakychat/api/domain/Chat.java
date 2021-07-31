@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Chat implements Serializable {
 
     @Builder.Default
-    String id = UUID.randomUUID();
+    String id = UUID.randomUUID().toString();
 
     String name;
 

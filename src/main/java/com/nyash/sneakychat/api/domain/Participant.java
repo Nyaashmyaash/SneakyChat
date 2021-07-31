@@ -18,6 +18,8 @@ public class Participant implements Serializable {
 
     String sessionId;
 
+    String participantId;
+
     String nickname;
 
 

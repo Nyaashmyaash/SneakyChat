@@ -2,6 +2,7 @@ package com.nyash.sneakychat.api.ws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nyash.sneakychat.Config.WebSocketConfig;
+import com.nyash.sneakychat.api.controller.ws.ChatWsController;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -34,14 +35,15 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Log4j2
 @ActiveProfiles("test-nyash")
 @RunWith(JUnitPlatform.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@AutoConfigureMockMvc
+@AutoConfigureMockMvc
 public class WebSocketTests {
 
     @Value("${local.server.port}")
@@ -49,11 +51,11 @@ public class WebSocketTests {
 
     private static WebClient client;
 
-//    @Autowired
-//    ObjectMapper mapper;
-//
-//    @Autowired
-//    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper mapper;
+
+    @Autowired
+    MockMvc mockMvc;
 
     @BeforeAll
     public void setup() throws Exception {
@@ -87,8 +89,8 @@ public class WebSocketTests {
     }
 
 //    @SneakyThrows
-    @Test
-    public void should_PassSuccessfully_When_CreateChat() {
+//    @Test
+//    public void should_PassSuccessfully_When_CreateChat() {
 //
 //        StompSession stompSession = client.getStompSession();
 //
@@ -97,7 +99,7 @@ public class WebSocketTests {
 //        String chatName = "Sneaky chat";
 //
 //        stompSession.send(
-//                ChatWSController.CREATE_CHAT,
+//                ChatWsController.CREATE_CHAT,
 //                chatName
 //        );
 //
@@ -115,14 +117,14 @@ public class WebSocketTests {
 //
 //        String chatId = (String) params.get(0).get("id");
 //
-//        String destination ChatWsController.getFetchPersonalMessagesDestination(chatId, RandomIdGenerator.generate());
+//        String destination = ChatWsController.getFetchPersonalMessagesDestination(chatId, RandomIdGenerator.generate());
 //
 //        final RunStompFrameHandler runStompFrameHandler = new RunStompFrameHandler(new CompletableFuture<>());
 //        stompSession.subscribe(
 //                destination,
 //                runStompFrameHandler
 //        );
-    }
+//    }
 
     private List<Transport> createTransportClient() {
         List<Transport> transports = new ArrayList<>(1);

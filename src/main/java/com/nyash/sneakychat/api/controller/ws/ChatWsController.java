@@ -2,6 +2,7 @@ package com.nyash.sneakychat.api.controller.ws;
 
 import com.nyash.sneakychat.api.domain.Chat;
 import com.nyash.sneakychat.api.dto.ChatDto;
+import com.nyash.sneakychat.api.dto.MessageDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,11 +19,15 @@ public class ChatWsController {
 
     SimpMessagingTemplate messagingTemplate;
 
-    public static final String CREATE_CHAT = "/topic.chat.{chat_name}.create";
-    public static final String FETCH_CREATE_CHAT_EVENT = "/topic.chat.create.event";
+    public static final String CREATE_CHAT = "/topic/chats.create";
+
+    public static final String FETCH_CREATE_CHAT_EVENT = "/topic/chats.create.event";
+
+    public static final String FETCH_MESSAGES = "/topic/chats.{chat_id}.messages";
+    public static final String FETCH_PERSONAL_MESSAGES = "/topic/chats.{chat_id}.participants.{participant_id}.messages";
 
     @MessageMapping(CREATE_CHAT)
-    public void createChat(@DestinationVariable("chat_name") String chatName) {
+    public void createChat(String chatName) {
 
         Chat chat = Chat.builder()
                 .name(chatName)
@@ -34,11 +39,24 @@ public class ChatWsController {
                 FETCH_CREATE_CHAT_EVENT,
                 ChatDto.builder()
                         .id(chat.getId())
+                        .name(chat.getName())
+                        .createdAt(chat.getCreatedAt())
+                        .build()
         );
     }
 
     @SubscribeMapping(FETCH_CREATE_CHAT_EVENT)
     public ChatDto fetchCreateChatEvent() {
+        return null;
+    }
+
+    @SubscribeMapping(FETCH_MESSAGES)
+    public MessageDto fetchMessages() {
+        return null;
+    }
+
+    @SubscribeMapping(FETCH_PERSONAL_MESSAGES)
+    public MessageDto fetchPersonalMessages() {
         return null;
     }
 

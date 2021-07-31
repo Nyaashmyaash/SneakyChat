@@ -3,6 +3,8 @@ package com.nyash.sneakychat.api.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,4 +14,7 @@ public class ChatDto {
 
     String id;
 
+    String name;
+
+    Instant createdAt;
 }

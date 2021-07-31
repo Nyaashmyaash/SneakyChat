@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -22,6 +23,8 @@ public class ChatWsController {
     public static final String CREATE_CHAT = "/topic/chats.create";
 
     public static final String FETCH_CREATE_CHAT_EVENT = "/topic/chats.create.event";
+
+    public static final String SEND_MESSAGE_TO_ALL = "/topic/chats.{chat_id}.messages.send";
 
     public static final String FETCH_MESSAGES = "/topic/chats.{chat_id}.messages";
     public static final String FETCH_PERSONAL_MESSAGES = "/topic/chats.{chat_id}.participants.{participant_id}.messages";
@@ -48,6 +51,20 @@ public class ChatWsController {
     @SubscribeMapping(FETCH_CREATE_CHAT_EVENT)
     public ChatDto fetchCreateChatEvent() {
         return null;
+    }
+
+    @MessageMapping(SEND_MESSAGE_TO_ALL)
+    public void sendMessageToAll(
+            String message,
+            @Header String simpSessionId) {
+
+        messagingTemplate.convertAndSend(
+                FETCH_MESSAGES,
+                MessageDto.builder()
+                        .from(simpSessionId)
+                        .message(message)
+                        .build()
+        );
     }
 
     @SubscribeMapping(FETCH_MESSAGES)

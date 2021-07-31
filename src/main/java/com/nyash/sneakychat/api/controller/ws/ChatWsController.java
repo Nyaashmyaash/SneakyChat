@@ -56,11 +56,27 @@ public class ChatWsController {
 
     @MessageMapping(SEND_MESSAGE_TO_ALL)
     public void sendMessageToAll(
+            @DestinationVariable("chat_id") String chatId,
             String message,
             @Header String simpSessionId) {
 
         messagingTemplate.convertAndSend(
-                FETCH_MESSAGES,
+                getFetchMessagesDestination(chatId),
+                MessageDto.builder()
+                        .from(simpSessionId)
+                        .message(message)
+                        .build()
+        );
+    }
+
+    @MessageMapping(SEND_MESSAGE_TO_PARTICIPANT)
+    public void SendMessageToParticipant(
+            @DestinationVariable("chat_id") String chatId,
+            String message,
+            @Header String simpSessionId) {
+
+        messagingTemplate.convertAndSend(
+                getFetchMessagesDestination(chatId),
                 MessageDto.builder()
                         .from(simpSessionId)
                         .message(message)
@@ -78,4 +94,7 @@ public class ChatWsController {
         return null;
     }
 
+    private String getFetchMessagesDestination(String chatId) {
+        return FETCH_MESSAGES.replace("{chat_id}", chatId);
+    }
 }

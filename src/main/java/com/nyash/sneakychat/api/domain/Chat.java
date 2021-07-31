@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -13,7 +14,8 @@ import java.time.Instant;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Chat implements Serializable {
 
-    Long id;
+    @Builder.Default
+    String id = UUID.randomUUID();
 
     String name;
 

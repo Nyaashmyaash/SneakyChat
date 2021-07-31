@@ -25,6 +25,7 @@ public class ChatWsController {
     public static final String FETCH_CREATE_CHAT_EVENT = "/topic/chats.create.event";
 
     public static final String SEND_MESSAGE_TO_ALL = "/topic/chats.{chat_id}.messages.send";
+    public static final String SEND_MESSAGE_TO_PARTICIPANT = "/topic/chats.{chat_id}.participants.{participant_id}.messages.send";
 
     public static final String FETCH_MESSAGES = "/topic/chats.{chat_id}.messages";
     public static final String FETCH_PERSONAL_MESSAGES = "/topic/chats.{chat_id}.participants.{participant_id}.messages";

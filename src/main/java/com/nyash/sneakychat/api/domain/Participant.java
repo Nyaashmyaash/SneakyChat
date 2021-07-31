@@ -20,7 +20,5 @@ public class Participant implements Serializable {
 
     String participantId;
 
-    String nickname;
-
-
+    String chatId;
 }

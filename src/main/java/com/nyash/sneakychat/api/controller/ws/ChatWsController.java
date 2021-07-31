@@ -3,6 +3,7 @@ package com.nyash.sneakychat.api.controller.ws;
 import com.nyash.sneakychat.api.domain.Chat;
 import com.nyash.sneakychat.api.dto.ChatDto;
 import com.nyash.sneakychat.api.dto.MessageDto;
+import com.nyash.sneakychat.api.service.ParticipantService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Controller
 public class ChatWsController {
+
+    ParticipantService participantService;
 
     SimpMessagingTemplate messagingTemplate;
 
@@ -87,7 +90,13 @@ public class ChatWsController {
     }
 
     @SubscribeMapping(FETCH_PERSONAL_MESSAGES)
-    public MessageDto fetchPersonalMessages() {
+    public MessageDto fetchPersonalMessages(
+            @DestinationVariable("chat_id") String chatId,
+            @DestinationVariable("participant_id") String participantId,
+            @Header String simpSessionId) {
+
+        participantService.handleSubscription(simpSessionId,participantId,chatId);
+
         return null;
     }
 

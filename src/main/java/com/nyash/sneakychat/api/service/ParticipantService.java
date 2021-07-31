@@ -10,5 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParticipantService {
 
+    public void handleSubscription(String sessionId, String participantId, String chatId) {
 
+    }
 }

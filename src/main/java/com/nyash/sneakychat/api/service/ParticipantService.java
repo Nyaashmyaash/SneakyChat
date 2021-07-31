@@ -6,9 +6,12 @@ import com.nyash.sneakychat.api.dto.ParticipantDto;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -17,7 +20,9 @@ public class ParticipantService {
 
     SimpMessagingTemplate messagingTemplate;
 
-    ZSetOperations<String, Participant> zSetOperations;
+    private static final Map<String, Participant> participantMap = new ConcurrentHashMap<>();
+
+    SetOperations<String, Participant> setOperations;
 
     public void handleSubscription(String sessionId, String participantId, String chatId) {
 
@@ -26,6 +31,10 @@ public class ParticipantService {
                 .id(participantId)
                 .chatId(chatId)
                 .build();
+
+        participantMap.put(participant.getId(), participant);
+
+        setOperations.add(ParticipantKeyHelper.makeKey(chatId), participant);
 
         messagingTemplate.convertAndSend(
                 ParticipantWsController.getFetchParticipantJoinInChat(chatId),

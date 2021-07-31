@@ -9,6 +9,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
@@ -62,8 +63,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public <F, S> ZSetOperations<F, S> setOperations(RedisTemplate<F, S> redisTemplate) {
-        return redisTemplate.opsForZSet();
+    public <F, S> SetOperations<F, S> setOperations(RedisTemplate<F, S> redisTemplate) {
+        return redisTemplate.opsForSet();
     }
 
 }

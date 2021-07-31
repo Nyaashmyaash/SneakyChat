@@ -11,13 +11,14 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Chat implements Serializable {
-
-    Long id;
-
-    String name;
+public class Participant implements Serializable {
 
     @Builder.Default
-    Instant createdAt = Instant.now();
+    Instant enterAt = Instant.now();
+
+    String sessionId;
+
+    String nickname;
+
 
 }

@@ -39,7 +39,7 @@ public class ParticipantService {
 
     SetOperations<String, Participant> setOperations;
 
-    public void handleSubscription(String sessionId, String participantId, String chatId) {
+    public void handleJoinChat(String sessionId, String participantId, String chatId) {
 
         Participant participant = Participant.builder()
                 .sessionId(sessionId)
@@ -80,7 +80,11 @@ public class ParticipantService {
 
                     log.info(
                             String.format(
-                                    "Participant leave from  \"%s\" chat.", participant.getSessionId(), chatId));
+                                    "Participant leave from  \"%s\" chat.",
+                                    participant.getSessionId(),
+                                    chatId
+                            )
+                    );
 
                     String key = ParticipantKeyHelper.makeKey(chatId);
 

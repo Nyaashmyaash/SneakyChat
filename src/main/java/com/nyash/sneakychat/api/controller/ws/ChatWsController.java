@@ -90,7 +90,7 @@ public class ChatWsController {
             @DestinationVariable("participant_id") String participantId,
             @Header String simpSessionId) {
 
-        participantService.handleSubscription(simpSessionId,participantId,chatId);
+        participantService.handleJoinChat(simpSessionId,participantId,chatId);
 
         return null;
     }

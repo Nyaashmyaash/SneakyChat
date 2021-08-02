@@ -3,6 +3,7 @@ package com.nyash.sneakychat.api.controller.ws;
 import com.nyash.sneakychat.api.domain.Chat;
 import com.nyash.sneakychat.api.dto.ChatDto;
 import com.nyash.sneakychat.api.dto.MessageDto;
+import com.nyash.sneakychat.api.service.ChatService;
 import com.nyash.sneakychat.api.service.ParticipantService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatWsController {
 
+    ChatService chatService;
+
     ParticipantService participantService;
 
     SimpMessagingTemplate messagingTemplate;
@@ -26,6 +29,7 @@ public class ChatWsController {
     public static final String CREATE_CHAT = "/topic/chats.create";
 
     public static final String FETCH_CREATE_CHAT_EVENT = "/topic/chats.create.event";
+    public static final String FETCH_DELETE_CHAT_EVENT = "/topic/chats.delete.event";
 
     public static final String SEND_MESSAGE_TO_ALL = "/topic/chats.{chat_id}.messages.send";
     public static final String SEND_MESSAGE_TO_PARTICIPANT = "/topic/chats.{chat_id}.participants.{participant_id}.messages.send";
@@ -35,21 +39,7 @@ public class ChatWsController {
 
     @MessageMapping(CREATE_CHAT)
     public void createChat(String chatName) {
-
-        Chat chat = Chat.builder()
-                .name(chatName)
-                .build();
-
-        //TODO: save in redis
-
-        messagingTemplate.convertAndSend(
-                FETCH_CREATE_CHAT_EVENT,
-                ChatDto.builder()
-                        .id(chat.getId())
-                        .name(chat.getName())
-                        .createdAt(chat.getCreatedAt())
-                        .build()
-        );
+        chatService.createChat(chatName);
     }
 
     @SubscribeMapping(FETCH_CREATE_CHAT_EVENT)

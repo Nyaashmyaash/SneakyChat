@@ -33,6 +33,8 @@ public class ParticipantService {
 
     ParticipantDtoFactory participantDtoFactory;
 
+    ChatService chatService;
+
     private static final Map<String, Participant> sessionIdToParticipantMap = new ConcurrentHashMap<>();
 
     SetOperations<String, Participant> setOperations;
@@ -80,13 +82,17 @@ public class ParticipantService {
                             String.format(
                                     "Participant leave from  \"%s\" chat.", participant.getSessionId(), chatId));
 
-                    setOperations.remove(
-                            ParticipantKeyHelper.makeKey(participant.getChatId()),
-                            participant
-                    );
+                    String key = ParticipantKeyHelper.makeKey(chatId);
+
+                    setOperations.remove(key, participant);
+
+                    Optional
+                            .ofNullable(setOperations.size(key))
+                            .filter(size -> size == 0L)
+                            .ifPresent(size -> chatService.deleteChat(chatId));
 
                     messagingTemplate.convertAndSend(
-                            ParticipantWsController.getFetchParticipantLeaveChat(participant.getChatId()),
+                            key,
                             participantDtoFactory.makeParticipantDto(participant)
                     );
                 });

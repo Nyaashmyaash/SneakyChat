@@ -45,12 +45,12 @@ public class ChatService {
         getChats()
                 .filter(chat -> Objects.equals(chatId, chat.getId()))
                 .findAny()
-                .isPresent(chat -> {
+                .ifPresent(chat -> {
 
                     setOperations.add(KEY, chat);
 
                     messagingTemplate.convertAndSend(
-                            ChatWsController.FETCH_CREATE_CHAT_EVENT,
+                            ChatWsController.FETCH_DELETE_CHAT_EVENT,
                             ChatDto.builder()
                                     .id(chat.getId())
                                     .name(chat.getName())

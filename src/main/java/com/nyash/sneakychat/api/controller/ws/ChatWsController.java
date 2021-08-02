@@ -47,6 +47,11 @@ public class ChatWsController {
         return null;
     }
 
+    @SubscribeMapping(FETCH_DELETE_CHAT_EVENT)
+    public ChatDto fetchDeleteChatEvent() {
+        return null;
+    }
+
     @MessageMapping(SEND_MESSAGE_TO_ALL)
     public void sendMessageToAll(
             @DestinationVariable("chat_id") String chatId,

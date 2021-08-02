@@ -20,6 +20,6 @@ public class Chat implements Serializable {
     String name;
 
     @Builder.Default
-    Instant createdAt = Instant.now();
+    Long createdAt = Instant.now().toEpochMilli();
 
 }

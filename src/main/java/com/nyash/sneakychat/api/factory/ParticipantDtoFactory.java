@@ -14,7 +14,7 @@ public class ParticipantDtoFactory {
         return ParticipantDto
                 .builder()
                 .id(participant.getId())
-                .enterAt(Instant.ofEpochMilli(participant.getEnterAt().toEpochMilli()))
+                .enterAt(Instant.ofEpochMilli(participant.getEnterAt()))
                 .build();
     }
 }

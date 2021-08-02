@@ -14,7 +14,7 @@ import java.time.Instant;
 public class Participant implements Serializable {
 
     @Builder.Default
-    Instant enterAt = Instant.now();
+    Long enterAt = Instant.now().toEpochMilli();
 
     String sessionId;
 

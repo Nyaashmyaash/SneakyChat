@@ -14,7 +14,7 @@ public class ChatDtoFactory {
         return ChatDto.builder()
                 .id(chat.getId())
                 .name(chat.getName())
-                .createdAt(Instant.ofEpochMilli(chat.getCreatedAt().toEpochMilli()))
+                .createdAt(Instant.ofEpochMilli(chat.getCreatedAt()))
                 .build();
     }
 }

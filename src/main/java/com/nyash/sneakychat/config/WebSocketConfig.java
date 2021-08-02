@@ -1,4 +1,4 @@
-package com.nyash.sneakychat.Config;
+package com.nyash.sneakychat.config;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

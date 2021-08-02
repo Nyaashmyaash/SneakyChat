@@ -1,7 +1,7 @@
 package com.nyash.sneakychat.api.ws;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nyash.sneakychat.Config.WebSocketConfig;
+import com.nyash.sneakychat.config.WebSocketConfig;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;

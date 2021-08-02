@@ -3,6 +3,7 @@ package com.nyash.sneakychat.api.service;
 import com.nyash.sneakychat.api.controller.ws.ParticipantWsController;
 import com.nyash.sneakychat.api.domain.Participant;
 import com.nyash.sneakychat.api.dto.ParticipantDto;
+import com.nyash.sneakychat.api.factory.ParticipantDtoFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +31,8 @@ public class ParticipantService {
 
     SimpMessagingTemplate messagingTemplate;
 
+    ParticipantDtoFactory participantDtoFactory;
+
     private static final Map<String, Participant> sessionIdToParticipantMap = new ConcurrentHashMap<>();
 
     SetOperations<String, Participant> setOperations;
@@ -48,10 +51,7 @@ public class ParticipantService {
 
         messagingTemplate.convertAndSend(
                 ParticipantWsController.getFetchParticipantJoinInChat(chatId),
-                ParticipantDto.builder()
-                        .id(participant.getId())
-                        .enterAt(participant.getEnterAt())
-                        .build()
+                participantDtoFactory.makeParticipantDto(participant)
         );
     }
 
@@ -74,7 +74,11 @@ public class ParticipantService {
                 .map(sessionIdToParticipantMap::remove)
                 .ifPresent(participant -> {
 
-                    log.info(String.format("Participant leave from  \"%s\" chat.", participant.getChatId()));
+                    String chatId = participant.getChatId();
+
+                    log.info(
+                            String.format(
+                                    "Participant leave from  \"%s\" chat.", participant.getSessionId(), chatId));
 
                     setOperations.remove(
                             ParticipantKeyHelper.makeKey(participant.getChatId()),
@@ -83,10 +87,7 @@ public class ParticipantService {
 
                     messagingTemplate.convertAndSend(
                             ParticipantWsController.getFetchParticipantLeaveChat(participant.getChatId()),
-                            ParticipantDto.builder()
-                                    .id(participant.getId())
-                                    .enterAt(participant.getEnterAt())
-                                    .build()
+                            participantDtoFactory.makeParticipantDto(participant)
                     );
                 });
 

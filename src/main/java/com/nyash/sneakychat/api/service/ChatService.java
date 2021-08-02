@@ -58,7 +58,7 @@ public class ChatService {
 
                     log.info(String.format("Chat \"%s\" deleted", chat.getName()));
 
-                    setOperations.add(KEY, chat);
+                    setOperations.remove(KEY, chat);
 
                     messagingTemplate.convertAndSend(
                             ChatWsController.FETCH_DELETE_CHAT_EVENT,

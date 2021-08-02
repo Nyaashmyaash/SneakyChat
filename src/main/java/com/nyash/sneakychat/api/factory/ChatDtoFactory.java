@@ -10,6 +10,7 @@ import java.time.Instant;
 public class ChatDtoFactory {
 
     public ChatDto makeChatDto(Chat chat) {
+
         return ChatDto.builder()
                 .id(chat.getId())
                 .name(chat.getName())

@@ -4,6 +4,10 @@ import com.nyash.sneakychat.api.controller.ws.ChatWsController;
 import com.nyash.sneakychat.api.domain.Chat;
 import com.nyash.sneakychat.api.dto.ChatDto;
 import com.nyash.sneakychat.api.factory.ChatDtoFactory;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Log4j2
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Service
 public class ChatService {
 
@@ -26,6 +33,8 @@ public class ChatService {
     private static final String KEY = "com:nyash:sneakychat:chats";
 
     public void createChat(String chatName) {
+
+        log.info(String.format("Chat \"%s\" created", chatName));
 
         Chat chat = Chat.builder()
                 .name(chatName)
@@ -47,6 +56,8 @@ public class ChatService {
                 .findAny()
                 .ifPresent(chat -> {
 
+                    log.info(String.format("Chat \"%s\" deleted", chat.getName()));
+
                     setOperations.add(KEY, chat);
 
                     messagingTemplate.convertAndSend(
@@ -56,8 +67,6 @@ public class ChatService {
 
 
                 });
-
-        setOperations.add(KEY, chat)
     }
 
     public Stream<Chat> getChats() {

@@ -6,6 +6,7 @@ import com.nyash.sneakychat.api.service.ChatService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class ChatRestController {
 
     public static final String FETCH_CHATS = "/api/chats";
 
-    @GetMapping(FETCH_CHATS)
+    @GetMapping(value = FETCH_CHATS, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ChatDto> fetchChats() {
 
         return chatService

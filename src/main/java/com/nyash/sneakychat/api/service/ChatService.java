@@ -29,7 +29,6 @@ public class ChatService {
 
     SetOperations<String, Chat> setOperations;
 
-
     private static final String KEY = "com:nyash:sneakychat:chats";
 
     public void createChat(String chatName) {
@@ -64,8 +63,6 @@ public class ChatService {
                             ChatWsController.FETCH_DELETE_CHAT_EVENT,
                             chatDtoFactory.makeChatDto(chat)
                     );
-
-
                 });
     }
 

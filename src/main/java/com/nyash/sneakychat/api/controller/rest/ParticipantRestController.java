@@ -6,6 +6,7 @@ import com.nyash.sneakychat.api.service.ParticipantService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,7 @@ public class ParticipantRestController {
 
     public static final String FETCH_PARTICIPANTS = "/api/chats/{chat_id}/participants";
 
-    @GetMapping(FETCH_PARTICIPANTS)
+    @GetMapping(value = FETCH_PARTICIPANTS, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ParticipantDto> fetchParticipants(@PathVariable("chat_id") String chatId) {
 
         return participantService

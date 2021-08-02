@@ -14,7 +14,6 @@ public class ParticipantDto {
 
     String id;
 
-    @Builder.Default
-    Instant enterAt = Instant.now();
+    Instant enterAt;
 
 }

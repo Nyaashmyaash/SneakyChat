@@ -3,6 +3,7 @@ package com.nyash.sneakychat.api.service;
 import com.nyash.sneakychat.api.controller.ws.ChatWsController;
 import com.nyash.sneakychat.api.domain.Chat;
 import com.nyash.sneakychat.api.dto.ChatDto;
+import com.nyash.sneakychat.api.factory.ChatDtoFactory;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,10 @@ public class ChatService {
 
     SimpMessagingTemplate messagingTemplate;
 
+    ChatDtoFactory chatDtoFactory;
+
     SetOperations<String, Chat> setOperations;
+
 
     private static final String KEY = "com:nyash:sneakychat:chats";
 
@@ -32,11 +36,7 @@ public class ChatService {
 
         messagingTemplate.convertAndSend(
                 ChatWsController.FETCH_CREATE_CHAT_EVENT,
-                ChatDto.builder()
-                        .id(chat.getId())
-                        .name(chat.getName())
-                        .createdAt(chat.getCreatedAt())
-                        .build()
+                chatDtoFactory.makeChatDto(chat)
         );
     }
 
@@ -51,11 +51,7 @@ public class ChatService {
 
                     messagingTemplate.convertAndSend(
                             ChatWsController.FETCH_DELETE_CHAT_EVENT,
-                            ChatDto.builder()
-                                    .id(chat.getId())
-                                    .name(chat.getName())
-                                    .createdAt(chat.getCreatedAt())
-                                    .build()
+                            chatDtoFactory.makeChatDto(chat)
                     );
 
 

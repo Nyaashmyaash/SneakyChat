@@ -1,7 +1,7 @@
 package com.nyash.sneakychat.api.controller.rest;
 
 import com.nyash.sneakychat.api.dto.ChatDto;
-import com.nyash.sneakychat.api.factory.ParticipantDtoFactory;
+import com.nyash.sneakychat.api.factory.ChatDtoFactory;
 import com.nyash.sneakychat.api.service.ChatService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class ChatRestController {
 
     ChatService chatService;
 
-    ParticipantDtoFactory participantDtoFactory;
+    ChatDtoFactory chatDtoFactory;
 
     public static final String FETCH_CHATS = "/api/chats";
 
@@ -29,7 +28,7 @@ public class ChatRestController {
 
         return chatService
                 .getChats()
-                .map()
+                .map(chatDtoFactory::makeChatDto)
                 .collect(Collectors.toList());
     }
 

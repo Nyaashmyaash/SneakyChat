@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,7 +19,6 @@ import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -55,10 +55,12 @@ public class ParticipantService {
         );
     }
 
+    @EventListener
     public void handleUnsubscribe(SessionUnsubscribeEvent event) {
         handleLeaveChat(event);
     }
 
+    @EventListener
     public void handleDisconnect(SessionDisconnectEvent event) {
         handleLeaveChat(event);
     }
@@ -71,6 +73,8 @@ public class ParticipantService {
                 .ofNullable(headerAccessor.getSessionId())
                 .map(sessionIdToParticipantMap::remove)
                 .ifPresent(participant -> {
+
+                    log.info(String.format("Participant leave from  \"%s\" chat.", participant.getChatId()));
 
                     setOperations.remove(
                             ParticipantKeyHelper.makeKey(participant.getChatId()),

@@ -10,10 +10,10 @@ import java.time.Instant;
 public class ChatDtoFactory {
 
     public ChatDto makeChatDto(Chat chat) {
-        ChatDto.builder()
+        return ChatDto.builder()
                 .id(chat.getId())
                 .name(chat.getName())
-                .createdAt(Instant.ofEpochMilli(chat.getCreatedAt()))
+                .createdAt(Instant.ofEpochMilli(chat.getCreatedAt().toEpochMilli()))
                 .build();
     }
 }

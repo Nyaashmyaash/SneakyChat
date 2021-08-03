@@ -2,7 +2,6 @@ package com.nyash.sneakychat.api.service;
 
 import com.nyash.sneakychat.api.controller.ws.ChatWsController;
 import com.nyash.sneakychat.api.domain.Chat;
-import com.nyash.sneakychat.api.dto.ChatDto;
 import com.nyash.sneakychat.api.factory.ChatDtoFactory;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
